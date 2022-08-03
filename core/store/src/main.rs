@@ -21,7 +21,7 @@ fn main() {
         built_time: 20220519,
     };
 
-    let deps = Dependencies {
+    let deps = Dependency {
         run: Some(run_deps),
         build: Some(build_deps),
         test: None,
@@ -29,15 +29,16 @@ fn main() {
 
     let build = r#"
 sudo pacman -Syu --noconfirm
-sudo pacman -S code
+sudo pacman -S neofetch --noconfirm
+mkdir -p test/{test1,test2/test4}
 "#
     .to_string();
 
     let manifest: Manifest = Manifest {
         package: package,
         dependencies: Some(deps),
-        build: Build { script: build },
+        build: BuildScript { script: build },
     };
 
-    println!("{}", toml::to_string_pretty(&manifest).unwrap())
+    manifest.build.build();
 }
